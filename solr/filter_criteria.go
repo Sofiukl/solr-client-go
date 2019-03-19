@@ -1,4 +1,4 @@
-package main
+package solr
 
 import (
 	"strings"
@@ -12,8 +12,8 @@ type FilterCriteria struct {
 
 // CriteriaOption - This is the option for filter criteria
 type FilterCriteriaOption struct {
-	fieldname  string
-	fieldvalue string
+	Fieldname  string
+	Fieldvalue string
 }
 
 // NewFilterCrtiteriaObject - This creates new filter criteria object
@@ -24,7 +24,7 @@ func NewFilterCrtiteriaObject() *FilterCriteria {
 
 // AddCriteria - This function add the criterias
 func (filterCriteria *FilterCriteria) AddCriteria(criteria FilterCriteriaOption) *FilterCriteria {
-	criteriaStr := filterCriteria.filterKeyword + "=" + criteria.fieldname + ":" + criteria.fieldvalue
+	criteriaStr := filterCriteria.filterKeyword + "=" + criteria.Fieldname + ":" + criteria.Fieldvalue
 	filterCriteria.critarias = append(filterCriteria.critarias, criteriaStr)
 	return filterCriteria
 }

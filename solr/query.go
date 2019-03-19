@@ -1,4 +1,4 @@
-package main
+package solr
 
 import "strings"
 
@@ -9,8 +9,8 @@ const (
 
 // QueryCriteriaOption - This is the option for filter criteria
 type QueryCriteriaOption struct {
-	fieldname  string
-	fieldvalue string
+	Fieldname  string
+	Fieldvalue string
 }
 
 // QueryCriteria - This conains all the criterias
@@ -27,7 +27,7 @@ func NewQueryCrtiteriaObject() *QueryCriteria {
 
 // AddCriteria - This function add the criterias
 func (queryCriteria *QueryCriteria) AddCriteria(criteria QueryCriteriaOption) *QueryCriteria {
-	criteriaStr := criteria.fieldname + ":" + criteria.fieldvalue
+	criteriaStr := criteria.Fieldname + ":" + criteria.Fieldvalue
 	queryCriteria.critarias = append(queryCriteria.critarias, criteriaStr)
 	return queryCriteria
 }

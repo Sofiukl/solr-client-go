@@ -1,4 +1,4 @@
-package main
+package solr
 
 // Connection structure
 type Connection struct {
