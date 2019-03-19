@@ -1,4 +1,4 @@
-# solr-client-go
+# solr-client-go [Work In Progress]
 
 Solr client in Go. 
 
