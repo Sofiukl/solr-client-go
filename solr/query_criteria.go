@@ -17,6 +17,7 @@ type QueryCriteriaOption struct {
 type QueryCriteria struct {
 	queryKeyword string
 	critarias    []string
+	CriteriaBuilder
 }
 
 // NewQueryCrtiteriaObject - This creates new query criteria object
@@ -33,7 +34,7 @@ func (queryCriteria *QueryCriteria) AddCriteria(criteria QueryCriteriaOption) *Q
 }
 
 // BuildCriteria - This builds the whole criteria
-func (queryCriteria *QueryCriteria) BuildCriteria() string {
+func (queryCriteria QueryCriteria) BuildCriteria() string {
 	if len(queryCriteria.critarias) == 0 {
 		return ""
 	}

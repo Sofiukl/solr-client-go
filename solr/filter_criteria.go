@@ -8,9 +8,10 @@ import (
 type FilterCriteria struct {
 	filterKeyword string
 	critarias     []string
+	CriteriaBuilder
 }
 
-// CriteriaOption - This is the option for filter criteria
+// FilterCriteriaOption - This is the option for filter criteria
 type FilterCriteriaOption struct {
 	Fieldname  string
 	Fieldvalue string
@@ -30,7 +31,7 @@ func (filterCriteria *FilterCriteria) AddCriteria(criteria FilterCriteriaOption)
 }
 
 // BuildCriteria - This builds the whole criteria
-func (filterCriteria *FilterCriteria) BuildCriteria() string {
+func (filterCriteria FilterCriteria) BuildCriteria() string {
 	if len(filterCriteria.critarias) == 0 {
 		return ""
 	}
