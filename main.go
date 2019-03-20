@@ -9,7 +9,7 @@ import (
 func main() {
 	fmt.Println("Solr Client go started its work..")
 
-	conn := solr.NewConnection("192.168.50.241", "4983", "solr", "BetaCSCollection")
+	conn := solr.NewConnection("localhost", "4983", "solr", "collection1")
 
 	queryCriteria := solr.NewQueryCrtiteriaObject().
 		AddCriteria(solr.QueryCriteriaOption{Fieldname: "rfiid", Fieldvalue: "10173069"}).
