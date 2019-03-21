@@ -1,6 +1,8 @@
 package solr
 
-import "strings"
+import (
+	"strings"
+)
 
 // Operators
 const (
@@ -17,7 +19,6 @@ type QueryCriteriaOption struct {
 type QueryCriteria struct {
 	queryKeyword string
 	critarias    []string
-	CriteriaBuilder
 }
 
 // NewQueryCrtiteriaObject - This creates new query criteria object
@@ -28,7 +29,7 @@ func NewQueryCrtiteriaObject() *QueryCriteria {
 
 // AddCriteria - This function add the criterias
 func (queryCriteria *QueryCriteria) AddCriteria(criteria QueryCriteriaOption) *QueryCriteria {
-	criteriaStr := criteria.Fieldname + ":" + criteria.Fieldvalue
+	criteriaStr := criteria.Fieldname + ":" + urlEncoded(criteria.Fieldvalue)
 	queryCriteria.critarias = append(queryCriteria.critarias, criteriaStr)
 	return queryCriteria
 }
@@ -36,7 +37,7 @@ func (queryCriteria *QueryCriteria) AddCriteria(criteria QueryCriteriaOption) *Q
 // BuildCriteria - This builds the whole criteria
 func (queryCriteria QueryCriteria) BuildCriteria() string {
 	if len(queryCriteria.critarias) == 0 {
-		return ""
+		return "q=*:*"
 	}
 	filterStr := strings.Join(queryCriteria.critarias, "%20"+OrOperator+"%20")
 	return "q=" + filterStr

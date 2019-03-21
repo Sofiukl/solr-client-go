@@ -8,7 +8,6 @@ import (
 type FilterCriteria struct {
 	filterKeyword string
 	critarias     []string
-	CriteriaBuilder
 }
 
 // FilterCriteriaOption - This is the option for filter criteria
@@ -25,7 +24,7 @@ func NewFilterCrtiteriaObject() *FilterCriteria {
 
 // AddCriteria - This function add the criterias
 func (filterCriteria *FilterCriteria) AddCriteria(criteria FilterCriteriaOption) *FilterCriteria {
-	criteriaStr := filterCriteria.filterKeyword + "=" + criteria.Fieldname + ":" + criteria.Fieldvalue
+	criteriaStr := filterCriteria.filterKeyword + "=" + criteria.Fieldname + ":" + urlEncoded(criteria.Fieldvalue)
 	filterCriteria.critarias = append(filterCriteria.critarias, criteriaStr)
 	return filterCriteria
 }

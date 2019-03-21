@@ -9,19 +9,31 @@ import (
 func main() {
 	fmt.Println("Solr Client go started its work..")
 
-	conn := solr.NewConnection("localhost", "4983", "solr", "collection1")
+	conn := solr.NewConnection("192.168.99.100", "8983", "solr", "gettingstarted")
 
-	queryCriteria := solr.NewQueryCrtiteriaObject().
-		AddCriteria(solr.QueryCriteriaOption{Fieldname: "rfiid", Fieldvalue: "10173069"}).
-		AddCriteria(solr.QueryCriteriaOption{Fieldname: "rficreatebyid", Fieldvalue: "10173069"})
+	// queryCriteria := solr.NewQueryCrtiteriaObject().
+	// 	AddCriteria(solr.QueryCriteriaOption{Fieldname: "address_s", Fieldvalue: "46221 Landing Parkway Fremont, CA 94538"})
 
 	filterCriteria := solr.NewFilterCrtiteriaObject().
-		AddCriteria(solr.FilterCriteriaOption{Fieldname: "type", Fieldvalue: "RFI"}).
-		AddCriteria(solr.FilterCriteriaOption{Fieldname: "pwaccountid", Fieldvalue: "11610579"})
+		//AddCriteria(solr.FilterCriteriaOption{Fieldname: "compName_s", Fieldvalue: "A-Data Technology"}).
+		AddCriteria(solr.FilterCriteriaOption{Fieldname: "id", Fieldvalue: "a*"})
+
+	paginationCriteria := solr.NewPaginationCriteriaObject().
+		AddCriteria(solr.PaginationOption{Start: 0, Rows: 2})
+
+	flCriteria := solr.NewFlCriteriaObject().
+		AddCriteria(solr.FlOption{Fields: []string{"id", "score"}})
+
+	sortCriteria := solr.NewSortCriteriaObject().
+		AddCriteria(solr.SortCriteriaOption{Sortfield: "score", Sortorder: "desc"}).
+		AddCriteria(solr.SortCriteriaOption{Sortfield: "id", Sortorder: "desc"})
 
 	solr.NewSolrClient(*conn).
-		SetQueryCriteria(*queryCriteria).
+		// SetQueryCriteria(*queryCriteria).
 		SetFilerCriteria(*filterCriteria).
+		SetPaginationCriteria(paginationCriteria).
+		SetFlCriteria(flCriteria).
+		SetSortCriteria(sortCriteria).
 		Search()
 	fmt.Println("Solr Client go completed its work.")
 }

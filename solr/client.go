@@ -5,9 +5,12 @@ import "fmt"
 // Client - This is solr client expose all the funcanalities that
 // required by the client
 type Client struct {
-	connection     Connection
-	queryCriteria  QueryCriteria
-	filterCriteria FilterCriteria
+	connection         Connection
+	queryCriteria      QueryCriteria
+	filterCriteria     FilterCriteria
+	paginationCriteria PaginationCriteria
+	flCriteria         FlCriteria
+	sortCriteria       SortCriteria
 }
 
 // SearchResponse - This will be returned to the caller
@@ -33,13 +36,27 @@ func (client *Client) SetFilerCriteria(filterCriteria FilterCriteria) *Client {
 	return client
 }
 
+// SetPaginationCriteria - sets the pagination criteria
+func (client *Client) SetPaginationCriteria(paginationCriteria PaginationCriteria) *Client {
+	client.paginationCriteria = paginationCriteria
+	return client
+}
+
+// SetFlCriteria - sets the fl criteria
+func (client *Client) SetFlCriteria(flCriteria FlCriteria) *Client {
+	client.flCriteria = flCriteria
+	return client
+}
+
+// SetSortCriteria - sets the sort criteria
+func (client *Client) SetSortCriteria(sortCriteria SortCriteria) *Client {
+	client.sortCriteria = sortCriteria
+	return client
+}
+
 // doSearch - This makes get request to the Solr
 func doSearch(client Client) string {
-	queryCrtiteria := client.queryCriteria
-	filterCriteria := client.filterCriteria
-	conn := client.connection
-
-	body := NewQueryReqBuilder(conn, queryCrtiteria, filterCriteria).
+	body := NewQueryReqBuilder(client).
 		Execute()
 	fmt.Println(body)
 	return body
