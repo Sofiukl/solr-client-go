@@ -7,9 +7,18 @@ import (
 	"github.com/sofiukl/solr-client-go/solr"
 )
 
+// ConnectionOption - This information needs to be passed during connection creation
+type ConnectionOption struct {
+	Host string
+	Port string
+	Root string
+	Core string
+}
+
 // Requestor - This is the interface to the Solr Core
 // From here the functionality will be exposed to the caller of this (solr-client-go) project
 type Requestor struct {
+	conn *solr.Connection
 }
 
 // EdismaxOption - This is structure for Edismax
@@ -30,15 +39,19 @@ type SearchOption struct {
 }
 
 // NewInterface - This function will be called to create a interface
-func NewInterface() Requestor {
-	solrintf := Requestor{}
+func NewInterface(connOpt ConnectionOption) Requestor {
+	conn := solr.NewConnection(solr.ConnectionOption{
+		Host: connOpt.Host,
+		Port: connOpt.Port,
+		Root: connOpt.Root,
+		Core: connOpt.Core})
+	solrintf := Requestor{conn: conn}
 	return solrintf
 }
 
 // Search - This function is exposed for search
 func (solrintf Requestor) Search(searchOption SearchOption) string {
 
-	conn := solr.NewConnection("192.168.99.100", "8983", "solr", "gettingstarted")
 	queryCriteria := solr.NewQueryCrtiteriaObject()
 	filterCriteria := solr.NewFilterCrtiteriaObject()
 	flCriteria := solr.NewFlCriteriaObject()
@@ -53,7 +66,7 @@ func (solrintf Requestor) Search(searchOption SearchOption) string {
 	prepareSort(searchOption.Sort, sortCriteria)
 	prepareEdismax(searchOption.Edismax, edismaxCriteria)
 
-	reposne := solr.NewSolrClient(*conn).
+	reposne := solr.NewSolrClient(*solrintf.conn).
 		SetQueryCriteria(*queryCriteria).
 		SetEdismaxQueryCriteria(*edismaxCriteria).
 		SetFilerCriteria(*filterCriteria).

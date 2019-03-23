@@ -1,19 +1,27 @@
 package solr
 
+// ConnectionOption - This information needs to be passed during connection creation
+type ConnectionOption struct {
+	Host string
+	Port string
+	Root string
+	Core string
+}
+
 // Connection structure
 type Connection struct {
 	host       string
 	port       string
 	root       string
-	collection string
+	core       string
 	protocol   string
 	logLevel   string
 	searchPath string
 }
 
 // NewConnection - This method will return a new connection
-func NewConnection(host string, port string, root string, collection string) *Connection {
-	newConn := Connection{host, port, root, collection, "http", "Error", "select"}
+func NewConnection(connOpt ConnectionOption) *Connection {
+	newConn := Connection{connOpt.Host, connOpt.Port, connOpt.Root, connOpt.Core, "http", "Error", "select"}
 	return &newConn
 }
 
@@ -48,5 +56,5 @@ func (c *Connection) makeHostURL() string {
 
 // MakeRequestURL - This builds the request URL
 func (c *Connection) MakeRequestURL() string {
-	return c.makeHostURL() + "/" + c.root + "/" + c.collection + "/" + c.searchPath
+	return c.makeHostURL() + "/" + c.root + "/" + c.core + "/" + c.searchPath
 }

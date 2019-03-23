@@ -1,34 +1,15 @@
 package main
 
 import (
-	"fmt"
-
 	"github.com/sofiukl/solr-client-go/solr"
-	"github.com/sofiukl/solr-client-go/solr/caller_interface"
 )
 
 func main() {
-	fmt.Println("Solr Client go started its work..")
-
-	// Approach 1:
-	fmt.Println("Approach 1 ..........................................")
-
-	solrconnector.NewInterface().
-		Search(solrconnector.SearchOption{
-			Edismax: solrconnector.EdismaxOption{
-				Q:  "a*",
-				Qf: []string{"id:100"},
-			},
-			// Q:     []string{"*:*"},
-			Fq:    []string{"id:a*"},
-			Fl:    []string{"id", "score"},
-			Sort:  []string{"id:asc"},
-			Start: 0,
-			Rows:  12})
-
-	// Approach 2:
-	fmt.Println("Approach 2 ..........................................")
-	conn := solr.NewConnection("192.168.99.100", "8983", "solr", "gettingstarted")
+	conn := solr.NewConnection(solr.ConnectionOption{
+		Host: "192.168.99.100",
+		Port: "8983",
+		Root: "solr",
+		Core: "gettingstarted"})
 
 	// edismaxCriteria := solr.NewEdismaxQueryCriteriaObject().
 	// 	AddQCriteria("*CA*").
@@ -59,5 +40,4 @@ func main() {
 		SetFlCriteria(*flCriteria).
 		SetSortCriteria(*sortCriteria).
 		Search()
-	fmt.Println("Solr Client go completed its work.")
 }
