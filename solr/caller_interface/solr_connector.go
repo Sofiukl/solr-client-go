@@ -1,7 +1,6 @@
 package solrconnector
 
 import (
-	"fmt"
 	"strconv"
 	"strings"
 
@@ -38,6 +37,7 @@ func NewInterface() Requestor {
 
 // Search - This function is exposed for search
 func (solrintf Requestor) Search(searchOption SearchOption) string {
+
 	conn := solr.NewConnection("192.168.99.100", "8983", "solr", "gettingstarted")
 	queryCriteria := solr.NewQueryCrtiteriaObject()
 	filterCriteria := solr.NewFilterCrtiteriaObject()
@@ -45,13 +45,14 @@ func (solrintf Requestor) Search(searchOption SearchOption) string {
 	paginationCriteria := solr.NewPaginationCriteriaObject()
 	sortCriteria := solr.NewSortCriteriaObject()
 	edismaxCriteria := solr.NewEdismaxQueryCriteriaObject()
+
 	prepareQ(searchOption.Q, queryCriteria)
 	prepareFq(searchOption.Fq, filterCriteria)
 	prepareFl(searchOption.Fl, flCriteria)
 	preparePagination(searchOption.Start, searchOption.Rows, paginationCriteria)
 	prepareSort(searchOption.Sort, sortCriteria)
 	prepareEdismax(searchOption.Edismax, edismaxCriteria)
-	fmt.Println(flCriteria)
+
 	reposne := solr.NewSolrClient(*conn).
 		SetQueryCriteria(*queryCriteria).
 		SetEdismaxQueryCriteria(*edismaxCriteria).

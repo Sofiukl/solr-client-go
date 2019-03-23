@@ -5,5 +5,11 @@ Solr client in Go.
 # Features
 1.1 Search
 
-# Usage
+
+# Documentation
+godoc -http=:6060
+http://localhost:6060/pkg/github.com/sofiukl/solr-client-go/
+
+
+# Example
 See main.go for details
