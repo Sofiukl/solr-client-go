@@ -19,13 +19,13 @@ type PaginationCriteria struct {
 }
 
 // NewPaginationCriteriaObject - This function creates the Pagination object
-func NewPaginationCriteriaObject() PaginationCriteria {
+func NewPaginationCriteriaObject() *PaginationCriteria {
 	pagination := PaginationCriteria{startKeyword: "start", rowsKeyword: "rows", critarias: []string{}}
-	return pagination
+	return &pagination
 }
 
 // AddCriteria - This adds the pagination criteria
-func (pagination PaginationCriteria) AddCriteria(paginationOption PaginationOption) PaginationCriteria {
+func (pagination *PaginationCriteria) AddCriteria(paginationOption PaginationOption) *PaginationCriteria {
 	criteriaStrStart := pagination.startKeyword + "=" + strconv.Itoa(paginationOption.Start)
 	criteriaStrRows := pagination.rowsKeyword + "=" + strconv.Itoa(paginationOption.Rows)
 	pagination.critarias = append(pagination.critarias, criteriaStrStart)

@@ -37,7 +37,8 @@ func (queryCriteria *QueryCriteria) AddCriteria(criteria QueryCriteriaOption) *Q
 // BuildCriteria - This builds the whole criteria
 func (queryCriteria QueryCriteria) BuildCriteria() string {
 	if len(queryCriteria.critarias) == 0 {
-		return "q=*:*"
+		// return "q=*:*"
+		return ""
 	}
 	filterStr := strings.Join(queryCriteria.critarias, "%20"+OrOperator+"%20")
 	return "q=" + filterStr

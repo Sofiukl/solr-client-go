@@ -18,13 +18,13 @@ type SortCriteria struct {
 }
 
 // NewSortCriteriaObject - This creates new sort criteria object
-func NewSortCriteriaObject() SortCriteria {
+func NewSortCriteriaObject() *SortCriteria {
 	sortCriteria := SortCriteria{sortKeyword: "sort", separator: ",", critarias: []string{}}
-	return sortCriteria
+	return &sortCriteria
 }
 
 // AddCriteria - This function add the criterias
-func (sortCriteria SortCriteria) AddCriteria(criteriaOption SortCriteriaOption) SortCriteria {
+func (sortCriteria *SortCriteria) AddCriteria(criteriaOption SortCriteriaOption) *SortCriteria {
 	criteriaStr := urlEncoded(criteriaOption.Sortfield + " " + criteriaOption.Sortorder)
 	sortCriteria.critarias = append(sortCriteria.critarias, criteriaStr)
 	return sortCriteria

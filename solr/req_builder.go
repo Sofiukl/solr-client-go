@@ -11,13 +11,14 @@ type QueryReqBuilder struct {
 func NewQueryReqBuilder(client Client) QueryReqBuilder {
 
 	queryCrtiteria := client.queryCriteria
+	edismaxCriteria := client.edismaxCriteria
 	filterCriteria := client.filterCriteria
 	paginationCriteria := client.paginationCriteria
 	flCriteria := client.flCriteria
 	sortCriteria := client.sortCriteria
 	conn := client.connection
 
-	builders := []CriteriaBuilder{queryCrtiteria, filterCriteria, paginationCriteria, flCriteria, sortCriteria}
+	builders := []CriteriaBuilder{queryCrtiteria, edismaxCriteria, filterCriteria, paginationCriteria, flCriteria, sortCriteria}
 	quryCriterias := NewCriteriaBuilderEngine(builders).Build()
 
 	requestPrefixURL := conn.MakeRequestURL()

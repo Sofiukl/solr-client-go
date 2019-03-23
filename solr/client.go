@@ -7,6 +7,7 @@ import "fmt"
 type Client struct {
 	connection         Connection
 	queryCriteria      QueryCriteria
+	edismaxCriteria    EdismaxQueryCriteria
 	filterCriteria     FilterCriteria
 	paginationCriteria PaginationCriteria
 	flCriteria         FlCriteria
@@ -27,6 +28,12 @@ func NewSolrClient(connection Connection) *Client {
 // SetQueryCriteria - sets the query criteria
 func (client *Client) SetQueryCriteria(queryCriteria QueryCriteria) *Client {
 	client.queryCriteria = queryCriteria
+	return client
+}
+
+// SetEdismaxQueryCriteria - sets the edismax query criteria
+func (client *Client) SetEdismaxQueryCriteria(edismaxCriteria EdismaxQueryCriteria) *Client {
+	client.edismaxCriteria = edismaxCriteria
 	return client
 }
 

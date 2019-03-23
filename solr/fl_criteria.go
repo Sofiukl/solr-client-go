@@ -17,13 +17,13 @@ type FlCriteria struct {
 }
 
 // NewFlCriteriaObject - This function creates the Fl object
-func NewFlCriteriaObject() FlCriteria {
+func NewFlCriteriaObject() *FlCriteria {
 	Fl := FlCriteria{separator: ",", flKeyword: "fl", criterias: []string{}}
-	return Fl
+	return &Fl
 }
 
 // AddCriteria - This adds the Fl criteria
-func (Fl FlCriteria) AddCriteria(FlOption FlOption) FlCriteria {
+func (Fl *FlCriteria) AddCriteria(FlOption FlOption) *FlCriteria {
 	Fl.criterias = FlOption.Fields
 	return Fl
 }
