@@ -1,14 +1,18 @@
-package solr
+package solrqry
 
-import "fmt"
+import (
+	"fmt"
 
-// QueryReqBuilder - This is he request builder structure
-type QueryReqBuilder struct {
+	solr "github.com/sofiukl/solr-client-go/solr/common"
+)
+
+// ReqBuilder - This is he request builder structure
+type ReqBuilder struct {
 	queryReq string
 }
 
 // NewQueryReqBuilder - This is the rquest builder
-func NewQueryReqBuilder(client Client) QueryReqBuilder {
+func NewQueryReqBuilder(client Client) ReqBuilder {
 
 	queryCrtiteria := client.queryCriteria
 	edismaxCriteria := client.edismaxCriteria
@@ -24,12 +28,12 @@ func NewQueryReqBuilder(client Client) QueryReqBuilder {
 	requestPrefixURL := conn.MakeRequestURL()
 	queryReq := requestPrefixURL + quryCriterias
 	fmt.Println("queryReq: " + queryReq)
-	rb := QueryReqBuilder{queryReq: queryReq}
+	rb := ReqBuilder{queryReq: queryReq}
 	return rb
 }
 
 // Execute the request
-func (rb QueryReqBuilder) Execute() string {
-	body := HandleGetReq(rb.queryReq)
+func (rb ReqBuilder) Execute() string {
+	body := solr.HandleGetReq(rb.queryReq)
 	return body
 }

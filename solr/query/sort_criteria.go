@@ -1,7 +1,9 @@
-package solr
+package solrqry
 
 import (
 	"strings"
+
+	"github.com/sofiukl/solr-client-go/solr/common"
 )
 
 // SortCriteriaOption - This is the option for sort criteria
@@ -25,7 +27,7 @@ func NewSortCriteriaObject() *SortCriteria {
 
 // AddCriteria - This function add the criterias
 func (sortCriteria *SortCriteria) AddCriteria(criteriaOption SortCriteriaOption) *SortCriteria {
-	criteriaStr := urlEncoded(criteriaOption.Sortfield + " " + criteriaOption.Sortorder)
+	criteriaStr := solr.URLEncoded(criteriaOption.Sortfield + " " + criteriaOption.Sortorder)
 	sortCriteria.critarias = append(sortCriteria.critarias, criteriaStr)
 	return sortCriteria
 }

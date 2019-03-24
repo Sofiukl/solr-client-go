@@ -1,4 +1,4 @@
-package solr
+package solrqry
 
 import (
 	"strings"

@@ -1,8 +1,10 @@
-package solr
+package solrqry
 
 import (
 	"strconv"
 	"strings"
+
+	"github.com/sofiukl/solr-client-go/solr/common"
 )
 
 // QfCriteriaOption - This is the structure for each criteria
@@ -26,7 +28,7 @@ func NewEdismaxQueryCriteriaObject() *EdismaxQueryCriteria {
 
 // AddQCriteria - This func adds one criteria
 func (edismaxCriteria *EdismaxQueryCriteria) AddQCriteria(q string) *EdismaxQueryCriteria {
-	edismaxCriteria.qString = urlEncoded(q)
+	edismaxCriteria.qString = solr.URLEncoded(q)
 	return edismaxCriteria
 }
 
@@ -42,7 +44,7 @@ func (edismaxCriteria EdismaxQueryCriteria) BuildCriteria() string {
 	if len(edismaxCriteria.qfCriterias) == 0 {
 		return ""
 	}
-	criteriaStr := strings.Join(edismaxCriteria.qfCriterias, urlEncoded(" "))
+	criteriaStr := strings.Join(edismaxCriteria.qfCriterias, solr.URLEncoded(" "))
 	edismaxq := []string{"q=" + edismaxCriteria.qString, "defType=" + edismaxCriteria.queryKeyword, "qf=" + criteriaStr}
 
 	return strings.Join(edismaxq, "&")

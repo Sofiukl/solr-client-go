@@ -1,4 +1,4 @@
-package solr
+package solrqry
 
 // CriteriaBuilder - This is the contract for the Criteria Builder
 type CriteriaBuilder interface {

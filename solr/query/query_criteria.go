@@ -1,7 +1,9 @@
-package solr
+package solrqry
 
 import (
 	"strings"
+
+	"github.com/sofiukl/solr-client-go/solr/common"
 )
 
 // Operators
@@ -29,7 +31,7 @@ func NewQueryCrtiteriaObject() *QueryCriteria {
 
 // AddCriteria - This function add the criterias
 func (queryCriteria *QueryCriteria) AddCriteria(criteria QueryCriteriaOption) *QueryCriteria {
-	criteriaStr := criteria.Fieldname + ":" + urlEncoded(criteria.Fieldvalue)
+	criteriaStr := criteria.Fieldname + ":" + solr.URLEncoded(criteria.Fieldvalue)
 	queryCriteria.critarias = append(queryCriteria.critarias, criteriaStr)
 	return queryCriteria
 }

@@ -1,11 +1,15 @@
-package solr
+package solrqry
 
-import "fmt"
+import (
+	"fmt"
+
+	"github.com/sofiukl/solr-client-go/solr/common"
+)
 
 // Client - This is solr client expose all the funcanalities that
 // required by the client
 type Client struct {
-	connection         Connection
+	connection         solr.Connection
 	queryCriteria      QueryCriteria
 	edismaxCriteria    EdismaxQueryCriteria
 	filterCriteria     FilterCriteria
@@ -19,8 +23,8 @@ type Client struct {
 // 	error bool
 // }
 
-// NewSolrClient - Creates new solr client
-func NewSolrClient(connection Connection) *Client {
+// NewSolrQueryClient - Creates new solr client
+func NewSolrQueryClient(connection solr.Connection) *Client {
 	client := Client{connection: connection, queryCriteria: QueryCriteria{}, filterCriteria: FilterCriteria{}}
 	return &client
 }

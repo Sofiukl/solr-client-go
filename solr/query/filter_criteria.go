@@ -1,7 +1,9 @@
-package solr
+package solrqry
 
 import (
 	"strings"
+
+	"github.com/sofiukl/solr-client-go/solr/common"
 )
 
 // FilterCriteria - This conains all the filter criterias
@@ -24,7 +26,7 @@ func NewFilterCrtiteriaObject() *FilterCriteria {
 
 // AddCriteria - This function add the criterias
 func (filterCriteria *FilterCriteria) AddCriteria(criteria FilterCriteriaOption) *FilterCriteria {
-	criteriaStr := filterCriteria.filterKeyword + "=" + criteria.Fieldname + ":" + urlEncoded(criteria.Fieldvalue)
+	criteriaStr := filterCriteria.filterKeyword + "=" + criteria.Fieldname + ":" + solr.URLEncoded(criteria.Fieldvalue)
 	filterCriteria.critarias = append(filterCriteria.critarias, criteriaStr)
 	return filterCriteria
 }

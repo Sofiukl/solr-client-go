@@ -1,17 +1,17 @@
 package main
 
 import (
-	"github.com/sofiukl/solr-client-go/solr/caller_interface"
+	"github.com/sofiukl/solr-client-go/solr/query"
 )
 
 func main() {
-	solrconnector.NewInterface(solrconnector.ConnectionOption{
+	solrqry.NewQueryInterface(solrqry.ConnectionOption{
 		Host: "192.168.99.100",
 		Port: "8983",
 		Root: "solr",
 		Core: "gettingstarted"}).
-		Search(solrconnector.SearchOption{
-			Edismax: solrconnector.EdismaxOption{
+		Search(solrqry.SearchOption{
+			Edismax: solrqry.EdismaxOption{
 				Q:  "a*",
 				Qf: []string{"id:100"},
 			},
