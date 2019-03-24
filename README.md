@@ -1,3 +1,5 @@
+[![Go Walker](http://gowalker.org/api/v1/badge)](https://gowalker.org/github.com/Sofiukl/solr-client-go/solr)
+
 # solr-client-go [Work In Progress]
 
 Solr client for  Golang developers.
