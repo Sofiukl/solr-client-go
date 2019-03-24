@@ -13,3 +13,6 @@ http://localhost:6060/pkg/github.com/sofiukl/solr-client-go/
 
 # Example
 See main.go for details
+
+
+Feel free to raise any issue. This package will be actively maintained.
