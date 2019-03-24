@@ -1,7 +1,7 @@
 package main
 
 import (
-	"github.com/sofiukl/solr-client-go/solr/query"
+	"github.com/sofiukl/solr-client-go/solr/solrqry"
 )
 
 func main() {
