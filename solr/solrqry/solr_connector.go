@@ -1,10 +1,11 @@
 package solrqry
 
 import (
+	"fmt"
 	"strconv"
 	"strings"
 
-	"github.com/sofiukl/solr-client-go/solr/common"
+	solr "github.com/sofiukl/solr-client-go/solr/common"
 )
 
 // ConnectionOption - This information needs to be passed during connection creation
@@ -27,10 +28,19 @@ type EdismaxOption struct {
 	Qf []string
 }
 
+// FacetOption - This is the facet object
+type FacetOption struct {
+	On     bool
+	Field  string
+	Prefix string
+	Query  string
+}
+
 // SearchOption - Caller of the search function will provide this datas
 type SearchOption struct {
 	Q       []string
 	Edismax EdismaxOption
+	Facet   FacetOption
 	Fq      []string
 	Fl      []string
 	Sort    []string
@@ -58,6 +68,7 @@ func (solrintf Requestor) Search(searchOption SearchOption) string {
 	paginationCriteria := NewPaginationCriteriaObject()
 	sortCriteria := NewSortCriteriaObject()
 	edismaxCriteria := NewEdismaxQueryCriteriaObject()
+	facetCriteria := NewFacetCrtiteriaObject()
 
 	prepareQ(searchOption.Q, queryCriteria)
 	prepareFq(searchOption.Fq, filterCriteria)
@@ -65,6 +76,7 @@ func (solrintf Requestor) Search(searchOption SearchOption) string {
 	preparePagination(searchOption.Start, searchOption.Rows, paginationCriteria)
 	prepareSort(searchOption.Sort, sortCriteria)
 	prepareEdismax(searchOption.Edismax, edismaxCriteria)
+	prepareFacet(searchOption.Facet, facetCriteria)
 
 	reposne := NewSolrQueryClient(*solrintf.conn).
 		SetQueryCriteria(*queryCriteria).
@@ -73,10 +85,21 @@ func (solrintf Requestor) Search(searchOption SearchOption) string {
 		SetFlCriteria(*flCriteria).
 		SetPaginationCriteria(*paginationCriteria).
 		SetSortCriteria(*sortCriteria).
+		SetFacetCriteria(*facetCriteria).
 		Search()
 	return reposne
 }
 
+// Select - This executes the specified request as is
+func (solrintf Requestor) Select(queryURL string) string {
+	conn := *solrintf.conn
+	requestPrefixURL := conn.MakeRequestURL()
+	queryReq := requestPrefixURL + "?" + queryURL
+	fmt.Println("queryReq: " + queryReq)
+	rb := ReqBuilder{queryReq: queryReq}
+	body := solr.HandleGetReq(rb.queryReq)
+	return body
+}
 func prepareQ(Q []string, queryCriteria *QueryCriteria) {
 	for _, qField := range Q {
 		fieldwithvalue := strings.Split(qField, ":")
@@ -121,4 +144,15 @@ func prepareEdismax(edismaxOption EdismaxOption, edismaxCriteria *EdismaxQueryCr
 		edismaxCriteria.
 			AddQfCriteria(QfCriteriaOption{Field: fieldwithvalue[0], Exp: exp})
 	}
+}
+
+func prepareFacet(facetOption FacetOption, facetCriteria *FacetCriteria) {
+	if !facetOption.On {
+		return
+	}
+	facetCriteria.
+		AddCriteria(FacetCriteriaOption{
+			Fieldname: facetOption.Field,
+			Prefix:    facetOption.Prefix,
+			Query:     facetOption.Query})
 }

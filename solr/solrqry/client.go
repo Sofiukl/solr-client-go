@@ -3,7 +3,7 @@ package solrqry
 import (
 	"fmt"
 
-	"github.com/sofiukl/solr-client-go/solr/common"
+	solr "github.com/sofiukl/solr-client-go/solr/common"
 )
 
 // Client - This is solr client expose all the funcanalities that
@@ -16,6 +16,7 @@ type Client struct {
 	paginationCriteria PaginationCriteria
 	flCriteria         FlCriteria
 	sortCriteria       SortCriteria
+	facetCriteria      FacetCriteria
 }
 
 // SearchResponse - This will be returned to the caller
@@ -62,6 +63,12 @@ func (client *Client) SetFlCriteria(flCriteria FlCriteria) *Client {
 // SetSortCriteria - sets the sort criteria
 func (client *Client) SetSortCriteria(sortCriteria SortCriteria) *Client {
 	client.sortCriteria = sortCriteria
+	return client
+}
+
+// SetFacetCriteria - sets the facet criteria
+func (client *Client) SetFacetCriteria(facetCriteria FacetCriteria) *Client {
+	client.facetCriteria = facetCriteria
 	return client
 }
 

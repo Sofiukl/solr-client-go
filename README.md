@@ -49,9 +49,12 @@ go get github.com/Sofiukl/solr-client-go
 See example folder for details
 
 # Documentation
-godoc -http=:6060
+	godoc -http=:6060
 
-{{server}}/pkg/github.com/sofiukl/solr-client-go/
+	{{server}}/pkg/github.com/sofiukl/solr-client-go/
+
+# Run Test
+	go test -v github.com/sofiukl/solr-client-go/examples/test
 
 # License
 MIT

@@ -20,9 +20,10 @@ func NewQueryReqBuilder(client Client) ReqBuilder {
 	paginationCriteria := client.paginationCriteria
 	flCriteria := client.flCriteria
 	sortCriteria := client.sortCriteria
+	facetCriteria := client.facetCriteria
 	conn := client.connection
 
-	builders := []CriteriaBuilder{queryCrtiteria, edismaxCriteria, filterCriteria, paginationCriteria, flCriteria, sortCriteria}
+	builders := []CriteriaBuilder{queryCrtiteria, edismaxCriteria, filterCriteria, paginationCriteria, flCriteria, sortCriteria, facetCriteria}
 	quryCriterias := NewCriteriaBuilderEngine(builders).Build()
 
 	requestPrefixURL := conn.MakeRequestURL()
