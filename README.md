@@ -46,6 +46,17 @@ go get github.com/Sofiukl/solr-client-go
 	}
 
 
+	Raw Query Execution
+	func TestSelect(t *testing.T) {
+	body := solrqry.NewQueryInterface(solrqry.ConnectionOption{
+		Host: "192.168.99.100",
+		Port: "8983",
+		Root: "solr",
+		Core: "gettingstarted"}).
+     Select("facet.field=reportnumber&facet=on&fl=reportnumber,score,pdfreportcontent&fq=pdfreporttemplateid:2330&fq=type:PDFReport&q=  (pdfreportcontent:2/55)^100")
+	_ = body
+	}
+	
 See example folder for details
 
 # Documentation
