@@ -1,8 +1,6 @@
 package solrqry
 
 import (
-	"fmt"
-
 	solr "github.com/sofiukl/solr-client-go/solr/common"
 )
 
@@ -28,7 +26,7 @@ func NewQueryReqBuilder(client Client) ReqBuilder {
 
 	requestPrefixURL := conn.MakeRequestURL()
 	queryReq := requestPrefixURL + quryCriterias
-	fmt.Println("queryReq: " + queryReq)
+	solr.GetDebugLogger().Println("Full Req: ", queryReq)
 	rb := ReqBuilder{queryReq: queryReq}
 	return rb
 }

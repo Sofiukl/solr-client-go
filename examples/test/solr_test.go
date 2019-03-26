@@ -8,10 +8,11 @@ import (
 
 func TestSearch(t *testing.T) {
 	body := solrqry.NewQueryInterface(solrqry.ConnectionOption{
-		Host: "*******",
-		Port: "****",
-		Root: "***",
-		Core: "********"}).
+		Host: "192.168.50.241",
+		Port: "4983",
+		Root: "solr",
+		Core: "BetaCSCollection"}).
+		SetLogLevel("ERROR").
 		Search(solrqry.SearchOption{
 			Edismax: solrqry.EdismaxOption{
 				Q:  "2/55",
@@ -32,10 +33,11 @@ func TestSearch(t *testing.T) {
 
 func TestSelect(t *testing.T) {
 	body := solrqry.NewQueryInterface(solrqry.ConnectionOption{
-		Host: "******",
-		Port: "****",
-		Root: "*****",
-		Core: "*******"}).
+		Host: "192.168.50.241",
+		Port: "4983",
+		Root: "solr",
+		Core: "BetaCSCollection"}).
+		SetLogLevel("ERROR").
 		Select("facet.field=reportnumber&facet=on&fl=reportnumber,score,pdfreportcontent&fq=pdfreporttemplateid:2330&fq=type:PDFReport&q=(pdfreportcontent:2/55)^100")
 	_ = body
 }

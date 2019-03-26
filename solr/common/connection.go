@@ -15,26 +15,18 @@ type Connection struct {
 	root       string
 	core       string
 	protocol   string
-	logLevel   string
 	searchPath string
 }
 
 // NewConnection - This method will return a new connection
 func NewConnection(connOpt ConnectionOption) *Connection {
-	newConn := Connection{connOpt.Host, connOpt.Port, connOpt.Root, connOpt.Core, "http", "Error", "select"}
+	newConn := Connection{connOpt.Host, connOpt.Port, connOpt.Root, connOpt.Core, "http", "select"}
 	return &newConn
 }
 
 // UseHTTPS - This function enables HTTPS
 func (c *Connection) UseHTTPS() *Connection {
 	c.protocol = "https"
-	return c
-}
-
-// SetLogLevel - Sets the log level
-// Valid value - Error, Debug, Info
-func (c *Connection) SetLogLevel(loglevel string) *Connection {
-	c.logLevel = loglevel
 	return c
 }
 
@@ -49,12 +41,15 @@ func (c *Connection) SetSearchPath(searchPath string) *Connection {
 func (c *Connection) makeHostURL() string {
 	if c.port != "" {
 		return c.protocol + "://" + c.host + ":" + c.port
-	} else {
-		return c.protocol + "://" + c.host
 	}
+
+	return c.protocol + "://" + c.host
+
 }
 
 // MakeRequestURL - This builds the request URL
 func (c *Connection) MakeRequestURL() string {
-	return c.makeHostURL() + "/" + c.root + "/" + c.core + "/" + c.searchPath
+	url := c.makeHostURL() + "/" + c.root + "/" + c.core + "/" + c.searchPath
+	Debug.Println("Solr Host Details: ", url)
+	return url
 }

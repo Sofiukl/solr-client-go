@@ -1,7 +1,6 @@
 package solrqry
 
 import (
-	"fmt"
 	"strings"
 )
 
@@ -53,7 +52,6 @@ func (facetCriteria *FacetCriteria) AddCriteria(criteria FacetCriteriaOption) *F
 		criteriaFacetQuery := "facet.query=" + facet.query
 		facetCriteria.criterias = append(facetCriteria.criterias, criteriaFacetQuery)
 	}
-	fmt.Println("Facet: ", facet)
 	return facetCriteria
 }
 

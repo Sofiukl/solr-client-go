@@ -1,8 +1,6 @@
 package solrqry
 
 import (
-	"fmt"
-
 	solr "github.com/sofiukl/solr-client-go/solr/common"
 )
 
@@ -18,11 +16,6 @@ type Client struct {
 	sortCriteria       SortCriteria
 	facetCriteria      FacetCriteria
 }
-
-// SearchResponse - This will be returned to the caller
-// type SearchResponse struct {
-// 	error bool
-// }
 
 // NewSolrQueryClient - Creates new solr client
 func NewSolrQueryClient(connection solr.Connection) *Client {
@@ -76,7 +69,7 @@ func (client *Client) SetFacetCriteria(facetCriteria FacetCriteria) *Client {
 func doSearch(client Client) string {
 	body := NewQueryReqBuilder(client).
 		Execute()
-	fmt.Println(body)
+	solr.GetDebugLogger().Println(body)
 	return body
 }
 

@@ -1,7 +1,6 @@
 package solrqry
 
 import (
-	"fmt"
 	"strconv"
 	"strings"
 
@@ -19,7 +18,8 @@ type ConnectionOption struct {
 // Requestor - This is the interface to the Solr Core
 // From here the functionality will be exposed to the caller of this (solr-client-go) project
 type Requestor struct {
-	conn *solr.Connection
+	conn     *solr.Connection
+	loglevel string
 }
 
 // EdismaxOption - This is structure for Edismax
@@ -55,7 +55,15 @@ func NewQueryInterface(connOpt ConnectionOption) Requestor {
 		Port: connOpt.Port,
 		Root: connOpt.Root,
 		Core: connOpt.Core})
-	solrintf := Requestor{conn: conn}
+	solrintf := Requestor{conn: conn, loglevel: "INFO"}
+	solrintf.SetLogLevel("INFO")
+	return solrintf
+}
+
+// SetLogLevel - This sets the log level
+func (solrintf Requestor) SetLogLevel(loglevel string) Requestor {
+	solrintf.loglevel = loglevel
+	solr.InitLogger(loglevel)
 	return solrintf
 }
 
@@ -95,7 +103,7 @@ func (solrintf Requestor) Select(queryURL string) string {
 	conn := *solrintf.conn
 	requestPrefixURL := conn.MakeRequestURL()
 	queryReq := requestPrefixURL + "?" + queryURL
-	fmt.Println("queryReq: " + queryReq)
+	solr.GetDebugLogger().Println("Full Req: ", queryReq)
 	rb := ReqBuilder{queryReq: queryReq}
 	body := solr.HandleGetReq(rb.queryReq)
 	return body
