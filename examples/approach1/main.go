@@ -1,15 +1,16 @@
 package main
 
 import (
+	example "github.com/sofiukl/solr-client-go/examples"
 	"github.com/sofiukl/solr-client-go/solr/solrqry"
 )
 
 func main() {
 	solrqry.NewQueryInterface(solrqry.ConnectionOption{
-		Host: "192.168.99.100",
-		Port: "8983",
-		Root: "solr",
-		Core: "gettingstarted"}).
+		Host: example.Host,
+		Port: example.Port,
+		Root: example.Root,
+		Core: example.Core}).
 		Search(solrqry.SearchOption{
 			Edismax: solrqry.EdismaxOption{
 				Q:  "a*",
