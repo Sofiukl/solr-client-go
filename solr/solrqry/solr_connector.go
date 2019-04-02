@@ -7,6 +7,11 @@ import (
 	solr "github.com/sofiukl/solr-client-go/solr/common"
 )
 
+// ResultPostprocess - Defines the post processor on raw result returned by the Solr
+type ResultPostprocess interface {
+	postProcess(solrRes string) string
+}
+
 // ConnectionOption - This information needs to be passed during connection creation
 type ConnectionOption struct {
 	Host string
@@ -68,7 +73,7 @@ func (solrintf Requestor) SetLogLevel(loglevel string) Requestor {
 }
 
 // Search - This function is exposed for search
-func (solrintf Requestor) Search(searchOption SearchOption) string {
+func (solrintf Requestor) Search(searchOption SearchOption, postProcess func(string) string) string {
 
 	queryCriteria := NewQueryCrtiteriaObject()
 	filterCriteria := NewFilterCrtiteriaObject()
@@ -94,7 +99,7 @@ func (solrintf Requestor) Search(searchOption SearchOption) string {
 		SetPaginationCriteria(*paginationCriteria).
 		SetSortCriteria(*sortCriteria).
 		SetFacetCriteria(*facetCriteria).
-		Search()
+		Search(postProcess)
 	return reposne
 }
 
@@ -135,7 +140,6 @@ func preparePagination(start int, rows int, paginationCriteria *PaginationCriter
 }
 
 func prepareSort(sort []string, sortCriteria *SortCriteria) {
-
 	for _, sortField := range sort {
 		fieldwithvalue := strings.Split(sortField, ":")
 		sortCriteria.

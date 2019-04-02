@@ -3,15 +3,16 @@ package main
 import (
 	"testing"
 
+	example "github.com/sofiukl/solr-client-go/examples"
 	"github.com/sofiukl/solr-client-go/solr/solrqry"
 )
 
 func TestSearch(t *testing.T) {
 	body := solrqry.NewQueryInterface(solrqry.ConnectionOption{
-		Host: "****",
-		Port: "***",
-		Root: "solr",
-		Core: "****"}).
+		Host: example.Host,
+		Port: example.Port,
+		Root: example.Root,
+		Core: example.Core}).
 		SetLogLevel("INFO").
 		Search(solrqry.SearchOption{
 			Edismax: solrqry.EdismaxOption{

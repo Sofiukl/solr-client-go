@@ -74,6 +74,7 @@ func doSearch(client Client) string {
 }
 
 // Search - This is exposed API for search in Solr with the specified query
-func (client *Client) Search() string {
-	return doSearch(*client)
+func (client *Client) Search(cb func(string) string) string {
+	result := doSearch(*client)
+	return cb(result)
 }

@@ -1,16 +1,17 @@
 package main
 
 import (
+	example "github.com/sofiukl/solr-client-go/examples"
 	solr "github.com/sofiukl/solr-client-go/solr/common"
 	"github.com/sofiukl/solr-client-go/solr/solrqry"
 )
 
 func main() {
 	conn := solr.NewConnection(solr.ConnectionOption{
-		Host: "192.168.99.100",
-		Port: "8983",
-		Root: "solr",
-		Core: "gettingstarted"})
+		Host: example.Host,
+		Port: example.Port,
+		Root: example.Root,
+		Core: example.Core})
 
 	// edismaxCriteria := solr.NewEdismaxQueryCriteriaObject().
 	// 	AddQCriteria("*CA*").

@@ -50,6 +50,5 @@ func (c *Connection) makeHostURL() string {
 // MakeRequestURL - This builds the request URL
 func (c *Connection) MakeRequestURL() string {
 	url := c.makeHostURL() + "/" + c.root + "/" + c.core + "/" + c.searchPath
-	Debug.Println("Solr Host Details: ", url)
 	return url
 }

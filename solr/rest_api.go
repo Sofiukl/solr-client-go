@@ -1,6 +1,7 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
 	"log"
 	"net/http"
@@ -12,29 +13,60 @@ import (
 	"github.com/gorilla/mux"
 )
 
-// SearchModel - This is the search model
-type SearchModel struct {
-	PINProjectID          string
-	Type                  string
-	SearchString          string
-	ReportFilterFields    string
-	ReportFilterValues    string
-	ReportDate            string
-	SortBy                string
-	SortOrder             string
-	Limit                 string
-	Offset                string
-	ContentSearchRequired int
-}
+// Host - This is solr server port
+// Port - This is solr connection port
+// Root - This is the root path
+// Core - This is the name of the solr collection
+var (
+	Host = "192.168.50.241"
+	Port = "4983"
+	Root = "solr"
+	Core = "BetaCSCollection"
+)
 
 const (
 	port = ":8000"
 )
 
 var (
-	searchFields       = []string{"reportnumber", "pdfreportcontent"}
-	flFieldsConfigured = []string{"score", "reportnumber"}
+	// searchFields       = []string{"reportnumber", "pdfreportcontent"}
+	searchFields = []string{"id", "compName_s"}
+	// flFieldsConfigured = []string{"score", "reportnumber"}
+	flFieldsConfigured = []string{"score", "id", "compName_s"}
 )
+
+func postProcess(solrRes string) string {
+	transformedRes := SResponse{}
+	if err := json.Unmarshal([]byte(string(solrRes)), &transformedRes); err != nil {
+		panic(err)
+	}
+	fmt.Printf("Response: %+v\n", transformedRes)
+	b, err := json.Marshal(transformedRes)
+	if err != nil {
+		fmt.Println("Failed to post process the solr response")
+	}
+	return string(b)
+}
+
+// Docs - This is the response structure
+type Docs struct {
+	ID        string `json:"id,omitempty"`
+	CompNameS string `json:"compName_s,omitempty"`
+	AddressS  string `json:"address_s,omitempty"`
+	Version   int    `json:"__version_,omitempty"`
+}
+
+// Response - This is resposne
+type Response struct {
+	NumFound int    `json:"numFound,omitempty"`
+	Start    int    `json:"start,omitempty"`
+	Docs     []Docs `json:"docs,omitempty"`
+}
+
+// SResponse - This is the response strucure
+type SResponse struct {
+	Response Response `json:"response,omitempty"`
+}
 
 func main() {
 	StartServer()
@@ -50,19 +82,19 @@ func StartServer() {
 
 // DoSearch - This is the search handler function
 func DoSearch(w http.ResponseWriter, req *http.Request) {
-
+	fmt.Println("User Inputs: ")
 	searchType := getAttributeVal(req, "type")
 	searchString := getAttributeVal(req, "searchString")
 	limit, _ := strconv.Atoi(getAttributeVal(req, "limit"))
 	offset, _ := strconv.Atoi(getAttributeVal(req, "offset"))
-	sortBys := strings.Split(getAttributeVal(req, "sortBy"), ",")
-	sortOrders := strings.Split(getAttributeVal(req, "sortOrder"), ",")
-	fqFields := strings.Split(getAttributeVal(req, "fqFields"), ",")
-	fqValues := strings.Split(getAttributeVal(req, "fqValues"), ",")
-	flFields := strings.Split(getAttributeVal(req, "flFields"), ",")
+	sortBys := splitAttributeVal(getAttributeVal(req, "sortBy"))
+	sortOrders := splitAttributeVal(getAttributeVal(req, "sortOrder"))
+	fqFields := splitAttributeVal(getAttributeVal(req, "fqFields"))
+	fqValues := splitAttributeVal(getAttributeVal(req, "fqValues"))
+	flFields := splitAttributeVal(getAttributeVal(req, "flFields"))
 
 	// validations
-	errorIfBlank("type", searchType)
+	// errorIfBlank("type", searchType)
 	errorIfBlank("searchString", searchString)
 
 	// prepare engine parameters
@@ -72,12 +104,11 @@ func DoSearch(w http.ResponseWriter, req *http.Request) {
 	Fl := prepareFl(flFields)
 
 	// Call Search Engine
-
 	body := solrqry.NewQueryInterface(solrqry.ConnectionOption{
-		Host: "192.168.50.241",
-		Port: "4983",
-		Root: "solr",
-		Core: "BetaCSCollection"}).
+		Host: Host,
+		Port: Port,
+		Root: Root,
+		Core: Core}).
 		SetLogLevel("INFO").
 		Search(solrqry.SearchOption{
 			Q:     Q,
@@ -85,8 +116,12 @@ func DoSearch(w http.ResponseWriter, req *http.Request) {
 			Fl:    Fl,
 			Sort:  Sort,
 			Start: offset,
-			Rows:  limit})
-	_ = body
+			Rows:  limit}, postProcess)
+
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusOK)
+	bodyJSON, _ := json.Marshal(body)
+	w.Write(bodyJSON)
 }
 func errorIfBlank(field string, val string) {
 	if val == "" {
@@ -132,7 +167,7 @@ func prepareQ(searchString string, searchFields []string) []string {
 func prepareFq(searchType string, fqFields []string, fqValues []string) []string {
 	// prepare Fq  []string{"type:PDFReport", "pdfreporttemplateid:2330"}
 	var Fq []string
-	Fq = append(Fq, "type:"+searchType)
+	// Fq = append(Fq, "type:"+searchType)
 	for index, fqField := range fqFields {
 		temp := fqField + ":" + fqValues[index]
 		Fq = append(Fq, temp)
@@ -148,4 +183,12 @@ func getAttributeVal(req *http.Request, key string) string {
 	}
 	fmt.Println(key, ":", keys[0])
 	return keys[0]
+}
+
+func splitAttributeVal(val string) []string {
+	values := []string{}
+	if val != "" {
+		values = strings.Split(val, ",")
+	}
+	return values
 }

@@ -27,9 +27,11 @@ func NewPaginationCriteriaObject() *PaginationCriteria {
 // AddCriteria - This adds the pagination criteria
 func (pagination *PaginationCriteria) AddCriteria(paginationOption PaginationOption) *PaginationCriteria {
 	criteriaStrStart := pagination.startKeyword + "=" + strconv.Itoa(paginationOption.Start)
-	criteriaStrRows := pagination.rowsKeyword + "=" + strconv.Itoa(paginationOption.Rows)
 	pagination.critarias = append(pagination.critarias, criteriaStrStart)
-	pagination.critarias = append(pagination.critarias, criteriaStrRows)
+	if paginationOption.Rows != 0 {
+		criteriaStrRows := pagination.rowsKeyword + "=" + strconv.Itoa(paginationOption.Rows)
+		pagination.critarias = append(pagination.critarias, criteriaStrRows)
+	}
 	return pagination
 }
 
