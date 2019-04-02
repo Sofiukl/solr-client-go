@@ -7,7 +7,7 @@ FROM golang:1.11
 LABEL maintainer="Sofikul Mallick <sofikul.mallick786@gmail.com>"
 
 # Set the Current Working Directory inside the container
-WORKDIR $GOPATH/src/github.com/sofiukl/solr-client-go/
+WORKDIR $GOPATH/src/github.com/sofiukl/solr-client-go
 
 # Copy everything from the current directory to the PWD(Present Working Directory) inside the container
 COPY . .
@@ -19,8 +19,7 @@ RUN go get -d -v ./...
 # Install the package
 RUN go install -v ./...
 
+ENTRYPOINT /go/bin/solr
+
 # This container exposes port 8080 to the outside world
 EXPOSE 8000
-
-# Run the executable
-CMD ["solr"]

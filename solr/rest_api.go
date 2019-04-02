@@ -29,10 +29,11 @@ const (
 )
 
 var (
-	// searchFields       = []string{"reportnumber", "pdfreportcontent"}
-	searchFields = []string{"id", "compName_s"}
-	// flFieldsConfigured = []string{"score", "reportnumber"}
-	flFieldsConfigured = []string{"score", "id", "compName_s"}
+	searchFields = []string{"reportnumber", "pdfreportcontent"}
+	// searchFields = []string{"id", "compName_s"}
+	flFieldsConfigured = []string{"score", "pinprojectid", "reportnumber", "reportname",
+		"createby", "createdate", "pdfreportcontent"}
+	// flFieldsConfigured = []string{"score", "id", "compName_s"}
 )
 
 func postProcess(solrRes string) string {
@@ -50,10 +51,27 @@ func postProcess(solrRes string) string {
 
 // Docs - This is the response structure
 type Docs struct {
-	ID        string `json:"id,omitempty"`
-	CompNameS string `json:"compName_s,omitempty"`
-	AddressS  string `json:"address_s,omitempty"`
-	Version   int    `json:"__version_,omitempty"`
+	// ID        string `json:"id,omitempty"`
+	// CompNameS string `json:"compName_s,omitempty"`
+	// AddressS  string `json:"address_s,omitempty"`
+	// Version   int    `json:"__version_,omitempty"`
+
+	PinprojectID          int    `json:"pinprojectid,omitempty"`
+	ModifyBy              int    `json:"modifyby,omitempty"`
+	ReportDate            string `json:"reportdate,omitempty"`
+	CreateDate            string `json:"createdate,omitempty"`
+	PdfReportModifyByname string `json:"pdfreportmodifybyname,omitempty"`
+	Type                  string `json:"type,omitempty"`
+	PdfreportID           int    `json:"pdfreportid,omitempty"`
+	Createby              int    `json:"createby,omitempty"`
+	Modifydate            string `json:"modifydate,omitempty"`
+	Approvaltype          int    `json:"approvaltype,omitempty"`
+	Reportname            string `json:"reportname,omitempty"`
+	Reportnumber          int    `json:"reportnumber,omitempty"`
+	Pdfreporttemplateid   int    `json:"pdfreporttemplateid,omitempty"`
+	Pdfreportcreatebyname string `json:"pdfreportcreatebyname,omitempty"`
+	Status                int    `json:"status,omitempty"`
+	Pdfreportcontent      string `json:"pdfreportcontent,omitempty"`
 }
 
 // Response - This is resposne
@@ -94,7 +112,7 @@ func DoSearch(w http.ResponseWriter, req *http.Request) {
 	flFields := splitAttributeVal(getAttributeVal(req, "flFields"))
 
 	// validations
-	// errorIfBlank("type", searchType)
+	errorIfBlank("type", searchType)
 	errorIfBlank("searchString", searchString)
 
 	// prepare engine parameters
