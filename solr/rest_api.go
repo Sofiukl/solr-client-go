@@ -49,6 +49,13 @@ func postProcess(solrRes string) string {
 	return string(b)
 }
 
+// ResponseError - This is struct
+type ResponseError struct {
+	Error       bool   `json:"error,omitempty"`
+	Message     string `json:"message,omitempty"`
+	Description string `json:"description,omitempty"`
+}
+
 // Docs - This is the response structure
 type Docs struct {
 	// ID        string `json:"id,omitempty"`
@@ -112,9 +119,12 @@ func DoSearch(w http.ResponseWriter, req *http.Request) {
 	flFields := splitAttributeVal(getAttributeVal(req, "flFields"))
 
 	// validations
-	errorIfBlank("type", searchType)
-	errorIfBlank("searchString", searchString)
-
+	if errorIfBlank(w, "type", searchType) {
+		return
+	}
+	if errorIfBlank(w, "searchString", searchString) {
+		return
+	}
 	// prepare engine parameters
 	Q := prepareQ(searchString, searchFields)
 	Fq := prepareFq(searchType, fqFields, fqValues)
@@ -141,10 +151,21 @@ func DoSearch(w http.ResponseWriter, req *http.Request) {
 	bodyJSON, _ := json.Marshal(body)
 	w.Write(bodyJSON)
 }
-func errorIfBlank(field string, val string) {
+func errorIfBlank(w http.ResponseWriter, field string, val string) bool {
+	resErr := ResponseError{}
 	if val == "" {
-		log.Fatal("please specify the ", field)
+		resErr.Message = "please specify the " + field
+		resErr.Error = true
+		errResJSON, _ := json.Marshal(resErr)
+		writeErrorRes(w, errResJSON)
+		return true
 	}
+	return false
+}
+func writeErrorRes(w http.ResponseWriter, errResJSON []byte) {
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusOK)
+	w.Write(errResJSON)
 }
 func prepareFl(flFields []string) []string {
 	if len(flFields) == 0 {
