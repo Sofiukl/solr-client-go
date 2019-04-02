@@ -74,10 +74,10 @@ func DoSearch(w http.ResponseWriter, req *http.Request) {
 	// Call Search Engine
 
 	body := solrqry.NewQueryInterface(solrqry.ConnectionOption{
-		Host: "****",
-		Port: "***",
+		Host: "192.168.50.241",
+		Port: "4983",
 		Root: "solr",
-		Core: "****"}).
+		Core: "BetaCSCollection"}).
 		SetLogLevel("INFO").
 		Search(solrqry.SearchOption{
 			Q:     Q,
