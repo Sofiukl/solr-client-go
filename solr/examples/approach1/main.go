@@ -1,16 +1,25 @@
 package main
 
 import (
-	example "github.com/sofiukl/solr-client-go/examples"
 	"github.com/sofiukl/solr-client-go/solr/solrqry"
 )
 
+var (
+	host = "localhost"
+	port = "4983"
+	root = "solr"
+	core = "gettingstarted"
+)
+
+func postProcess(solrRes string) string {
+	return solrRes
+}
 func main() {
 	solrqry.NewQueryInterface(solrqry.ConnectionOption{
-		Host: example.Host,
-		Port: example.Port,
-		Root: example.Root,
-		Core: example.Core}).
+		Host: host,
+		Port: port,
+		Root: root,
+		Core: core}).
 		Search(solrqry.SearchOption{
 			Edismax: solrqry.EdismaxOption{
 				Q:  "a*",
@@ -21,5 +30,5 @@ func main() {
 			Fl:    []string{"id", "score"},
 			Sort:  []string{"id:asc"},
 			Start: 0,
-			Rows:  12})
+			Rows:  12}, postProcess)
 }

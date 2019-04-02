@@ -2,17 +2,21 @@ package main
 
 import (
 	"testing"
-
-	example "github.com/sofiukl/solr-client-go/examples"
 	"github.com/sofiukl/solr-client-go/solr/solrqry"
 )
 
+var (
+	host = "localhost"
+	port = "4983"
+	root = "solr"
+	core = "gettingstarted"
+)
 func TestSearch(t *testing.T) {
 	body := solrqry.NewQueryInterface(solrqry.ConnectionOption{
-		Host: example.Host,
-		Port: example.Port,
-		Root: example.Root,
-		Core: example.Core}).
+		Host: host,
+		Port: port,
+		Root: root,
+		Core: core}).
 		SetLogLevel("INFO").
 		Search(solrqry.SearchOption{
 			Edismax: solrqry.EdismaxOption{
@@ -28,7 +32,9 @@ func TestSearch(t *testing.T) {
 			},
 			Sort:  []string{"score:desc", "reportnumber:desc"},
 			Start: 0,
-			Rows:  12})
+			Rows:  12}, func postProcess(solrRes string) string {
+				return solrRes
+			})
 	_ = body
 }
 

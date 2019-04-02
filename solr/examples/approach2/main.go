@@ -1,17 +1,26 @@
 package main
 
 import (
-	example "github.com/sofiukl/solr-client-go/examples"
 	solr "github.com/sofiukl/solr-client-go/solr/common"
 	"github.com/sofiukl/solr-client-go/solr/solrqry"
 )
 
+var (
+	host = "localhost"
+	port = "4983"
+	root = "solr"
+	core = "gettingstarted"
+)
+
+func postProcess(solrRes string) string {
+	return solrRes
+}
 func main() {
 	conn := solr.NewConnection(solr.ConnectionOption{
-		Host: example.Host,
-		Port: example.Port,
-		Root: example.Root,
-		Core: example.Core})
+		Host: host,
+		Port: port,
+		Root: root,
+		Core: core})
 
 	// edismaxCriteria := solr.NewEdismaxQueryCriteriaObject().
 	// 	AddQCriteria("*CA*").
@@ -41,5 +50,5 @@ func main() {
 		SetPaginationCriteria(*paginationCriteria).
 		SetFlCriteria(*flCriteria).
 		SetSortCriteria(*sortCriteria).
-		Search()
+		Search(postProcess)
 }
